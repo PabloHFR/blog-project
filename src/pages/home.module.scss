@@ -18,11 +18,12 @@
   }
 
   h1 {
-    font-size: 4.5rem;
+    font-size: 5.5rem;
     font-family: "Times New Roman", Times, serif;
     line-height: 4.5rem;
     font-weight: bolder;
     margin-top: 2.5rem;
+    color: var(--black);
   }
 
   p {
@@ -34,5 +35,9 @@
       color: var(--yellow-500);
       font-weight: bold;
     }
+  }
+
+  button {
+    margin-top: 2.5rem;
   }
 }

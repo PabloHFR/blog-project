@@ -1,3 +1,4 @@
+import { SubscribeButton } from "@/components/SubscribeButton";
 import Head from "next/head";
 
 import styles from "./home.module.scss";
@@ -17,6 +18,7 @@ export default function Home() {
             topic <br />
             <span>for $9.99 monthly</span>
           </p>
+          <SubscribeButton />
         </section>
       </main>
     </>
