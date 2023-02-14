@@ -6,7 +6,7 @@ export default function Home() {
       <Head>
         <title>Minimum</title>
       </Head>
-      <h1>Hello</h1>;
+      <h1>Hello</h1>
     </>
   );
 }
