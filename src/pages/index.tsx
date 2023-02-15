@@ -1,9 +1,18 @@
-import { SubscribeButton } from "@/components/SubscribeButton";
+import { GetStaticProps } from "next";
 import Head from "next/head";
+import { SubscribeButton } from "@/components/SubscribeButton";
 
 import styles from "./home.module.scss";
+import { stripe } from "@/services/stripe";
 
-export default function Home() {
+interface HomeProps {
+  product: {
+    priceId: string;
+    amount: number;
+  };
+}
+
+export default function Home({ product }: HomeProps) {
   return (
     <>
       <Head>
@@ -16,11 +25,30 @@ export default function Home() {
           <p>
             Get access to stories, essays and expertise from writers on any
             topic <br />
-            <span>for $9.99 monthly</span>
+            <span>for {product.amount} monthly</span>
           </p>
-          <SubscribeButton />
+          <SubscribeButton priceId={product.priceId} />
         </section>
       </main>
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const price = await stripe.prices.retrieve("price_1MbiR4Bv3Ppl7AI8H0m4Y3It");
+
+  const product = {
+    priceId: price.id,
+    amount: new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(price.unit_amount! / 100),
+  };
+
+  return {
+    props: {
+      product,
+    },
+    revalidate: 60 * 60 * 24, // 24 hours
+  };
+};
