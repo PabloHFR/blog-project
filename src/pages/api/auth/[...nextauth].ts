@@ -4,6 +4,25 @@ import GithubProvider from "next-auth/providers/github";
 
 import { fauna } from "../../../services/fauna";
 
+interface SessionWithSubscription
+  extends Omit<NextAuthOptions["session"], "user"> {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    activeSubscription?: {
+      ref: {
+        id: string;
+      };
+      ts: number;
+      data: {
+        status: string;
+        userId: string;
+      };
+    };
+  };
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
@@ -50,9 +69,7 @@ export const authOptions: NextAuthOptions = {
         };
       }
     },
-    async signIn({ user, account, profile }) {
-      const { email } = user;
-
+    async signIn({ user, account, profile, email, credentials }) {
       try {
         await fauna.query(
           q.If(
