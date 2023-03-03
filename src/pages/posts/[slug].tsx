@@ -1,6 +1,7 @@
 import { getPrismicClient } from "@/services/prismic";
 import { asText } from "@prismicio/richtext";
 import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { stringify } from "querystring";
@@ -44,6 +45,17 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const session = await getSession({ req });
   const slug = stringify(params);
+
+  console.log(session);
+
+  if (!session?.activeSubscription) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const prismic = getPrismicClient();
 
